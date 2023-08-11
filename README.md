@@ -5,6 +5,7 @@
 [![Code Coverage](https://img.shields.io/badge/Code%20Coverage-100%25-success?style=flat)](https://ricardotondello.github.io/FunctionalEnumerableExtensions/unittests)
 [![NuGet latest version](https://badgen.net/nuget/v/FunctionalEnumerableExtensions/latest)](https://nuget.org/packages/FunctionalEnumerableExtensions)
 [![NuGet downloads](https://img.shields.io/nuget/dt/FunctionalEnumerableExtensions)](https://www.nuget.org/packages/FunctionalEnumerableExtensions)
+[![Qodana](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/code_quality.yml/badge.svg)](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/code_quality.yml)
 
 `FunctionalEnumerableExtensions` is a C# class library that provides a set of extension methods for working with enumerable collections. 
 These extensions are designed to enhance memory efficiency and make common operations more convenient. 
