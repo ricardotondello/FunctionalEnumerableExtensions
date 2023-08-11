@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalEnumerableExtensions", "src\FunctionalEnumerableExtensions.csproj", "{4D2FA728-D37C-4471-BAE2-4A02B56016FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalEnumerableExtensionsTests", "tests\FunctionalEnumerableExtensionsTests\FunctionalEnumerableExtensionsTests.csproj", "{BF415E3F-CCA5-4684-8C37-9067E03C11EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D2FA728-D37C-4471-BAE2-4A02B56016FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D2FA728-D37C-4471-BAE2-4A02B56016FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D2FA728-D37C-4471-BAE2-4A02B56016FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D2FA728-D37C-4471-BAE2-4A02B56016FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF415E3F-CCA5-4684-8C37-9067E03C11EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF415E3F-CCA5-4684-8C37-9067E03C11EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF415E3F-CCA5-4684-8C37-9067E03C11EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF415E3F-CCA5-4684-8C37-9067E03C11EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
