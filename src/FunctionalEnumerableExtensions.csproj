@@ -10,14 +10,14 @@
         <Description>These extensions are designed to enhance memory efficiency and make common operations more convenient. Whether you're converting to lists, arrays, or working with spans, these extensions aim to improve your code's performance and readability.</Description>
         <RepositoryUrl>https://github.com/ricardotondello/FunctionalEnumerableExtensions</RepositoryUrl>
         <Title>FunctionalEnumerableExtensions</Title>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReadmeFile>NuGet.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Ricardo Tondello</Authors>
         <PackageIcon>layer.png</PackageIcon>
         <RootNamespace>FunctionalEnumerableExtensions</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\docs\NuGet.md" Pack="true" PackagePath="\"/>
         <None Include="..\LICENSE" Pack="true" PackagePath="LICENSE"/>
         <None Include="layer.png" Pack="true" PackagePath=""/>
     </ItemGroup>

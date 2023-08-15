@@ -1,12 +1,6 @@
 
 # FunctionalEnumerableExtensions 🌟
 
-[![Build](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/dotnet.yml)
-[![Qodana](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/code_quality.yml/badge.svg)](https://qodana.cloud/projects/3eWXx/reports/y2bOM)
-[![Code Coverage](https://img.shields.io/badge/Code%20Coverage-100%25-success?style=flat)](https://ricardotondello.github.io/FunctionalEnumerableExtensions/unittests)
-[![NuGet latest version](https://badgen.net/nuget/v/FunctionalEnumerableExtensions/latest)](https://nuget.org/packages/FunctionalEnumerableExtensions)
-[![NuGet downloads](https://img.shields.io/nuget/dt/FunctionalEnumerableExtensions)](https://www.nuget.org/packages/FunctionalEnumerableExtensions)
-
 `FunctionalEnumerableExtensions` is a C# class library that provides a set of extension methods for working with enumerable collections. 
 These extensions are designed to enhance memory efficiency and make common operations more convenient. 
 Whether you're converting to lists, arrays, or working with spans, these extensions aim to improve your code's performance and readability.
@@ -62,17 +56,3 @@ Convert the enumerable collection to a Span, suitable for in-place data processi
 ```csharp
 Span<T> mySpan = myEnumerable.AsSpan();
 ```
-
-## Contributing 👥
-
-Contributions are welcome! If you find a bug or have a feature request, please open an issue on GitHub.
-If you would like to contribute code, please fork the repository and submit a pull request.
-
-## License 📄
-
-This project is licensed under the MIT License.
-See [LICENSE](https://github.com/ricardotondello/FunctionalEnumerableExtensions/blob/main/LICENSE) for more information.
-
-## Support ☕
-
-<a href="https://www.buymeacoffee.com/ricardotondello" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
