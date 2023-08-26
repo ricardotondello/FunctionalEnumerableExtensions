@@ -2,8 +2,8 @@
 # FunctionalEnumerableExtensions 🌟
 
 [![Build](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/ricardotondello/FunctionalEnumerableExtensions/actions/workflows/dotnet.yml)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=awesome-ric_functionalenumerableextensions&metric=alert_status)](https://sonarcloud.io/dashboard?id=awesome-ric_functionalenumerableextensions)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=awesome-ric_functionalenumerableextensions&metric=coverage)](https://sonarcloud.io/component_measures?id=awesome-ric_functionalenumerableextensions&metric=coverage)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=ricardotondello_FunctionalEnumerableExtensions&metric=alert_status)](https://sonarcloud.io/dashboard?id=ricardotondello_FunctionalEnumerableExtensions)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ricardotondello_FunctionalEnumerableExtensions&metric=coverage)](https://sonarcloud.io/component_measures?id=ricardotondello_FunctionalEnumerableExtensions&metric=coverage)
 [![NuGet latest version](https://badgen.net/nuget/v/FunctionalEnumerableExtensions/latest)](https://nuget.org/packages/FunctionalEnumerableExtensions)
 [![NuGet downloads](https://img.shields.io/nuget/dt/FunctionalEnumerableExtensions)](https://www.nuget.org/packages/FunctionalEnumerableExtensions)
 
