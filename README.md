@@ -88,6 +88,29 @@ Throws an ArgumentNullException if the input enumerable is null.
 var myFilteredList = myEnumerable.CollectNonNulls();
 ```
 
+### IEnumerable<T> EnsureEnumerable<T>(this IEnumerable<T> enumerable)
+Prevent the enumerable to be null.
+
+**Parameters:**
+- `enumerable` (IEnumerable<T>): The input enumerable collection.
+
+**Usage:**
+```csharp
+var myNotNullEnumerable = myEnumerable.EnsureEnumerable();
+```
+
+### (IEnumerable<T> DesiredItems, IEnumerable<T> RemainingItems) SplitBy<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+Splits the list according to the predicate.
+
+**Parameters:**
+- `enumerable` (IEnumerable<T>): The input enumerable collection.
+- `predicate` (Func<T, bool>): Condition to be applied to separate the enumerable
+
+**Usage:**
+```csharp
+var (desiredItems, remainingItems) = enumerable.SplitBy(customer => customer.LoyaltyTimeInYears > 20);
+```
+
 ## Contributing 👥
 
 Contributions are welcome! If you find a bug or have a feature request, please open an issue on GitHub.
