@@ -23,6 +23,17 @@ public class FunctionalEnumerableExtensionsTests
 
         result.Should().BeSameAs(input);
     }
+    
+    [Fact]
+    public void EnsureList_WithEmptyList_ReturnsEmptyList()
+    {
+        // ReSharper disable once CollectionNeverUpdated.Local
+        var input = new List<string>();
+
+        var result = input.EnsureList();
+
+        result.Should().BeSameAs(input);
+    }
 
     [Fact]
     public void EnsureList_WithEnumerable_ReturnsNewList()
@@ -244,5 +255,87 @@ public class FunctionalEnumerableExtensionsTests
 
         // Assert
         result.Should().BeEmpty();
+    }
+    
+    [Fact]
+    public void EnsureEnumerable_Null_ReturnsEmptyEnumerable()
+    {
+        // Arrange
+        IEnumerable<string> input = null!;
+
+        // Act
+        var result = input.EnsureEnumerable();
+
+        // Assert
+        result.Should().BeSameAs(Enumerable.Empty<string>());
+    }
+    
+    [Fact]
+    public void EnsureEnumerable_NotNull_ReturnsEnumerableItSelf()
+    {
+        // Arrange
+        IEnumerable<string> input = new []{"a", "b"};
+
+        // Act
+        var result = input.EnsureEnumerable();
+
+        // Assert
+        result.Should().BeSameAs(input);
+    }
+    
+    [Fact]
+    public void SplitBy_WhenPredicateMatch_ReturnsBothLists()
+    {
+        // Arrange
+        var input = new []{"a", "b", "b", "c"};
+
+        // Act
+        var result = input.SplitBy(s => s.Equals("b", StringComparison.InvariantCultureIgnoreCase));
+
+        // Assert
+        result.DesiredItems.Should().Contain(new []{"b", "b"});
+        result.RemainingItems.Should().Contain(new []{"a", "c"});
+    }
+    
+    [Fact]
+    public void SplitBy_WhenPredicateDoesntMatch_ReturnsBothListsWithDesiredEmpty()
+    {
+        // Arrange
+        var input = new []{"a", "b", "b", "c"};
+
+        // Act
+        var (desiredItems, remainingItems) = input.SplitBy(s => s.Equals("d", StringComparison.InvariantCultureIgnoreCase));
+
+        // Assert
+        desiredItems.Should().BeEmpty();
+        remainingItems.Should().Contain(new []{"a", "b", "b","c"});
+    }
+    
+    [Fact]
+    public void SplitBy_WhenPredicateMatchesAll_ReturnsBothListsWithRemainingEmpty()
+    {
+        // Arrange
+        var input = new []{"a", "a", "a", "a"};
+
+        // Act
+        var result = input.SplitBy(s => s.Equals("a", StringComparison.InvariantCultureIgnoreCase));
+
+        // Assert
+        result.DesiredItems.Should().Contain(new []{"a", "a", "a", "a"});
+        result.RemainingItems.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void SplitBy_WhenEnumerableIsNull_ThrowsArgumentNullException()
+    {
+        // Arrange
+        IEnumerable<string> input = null!;
+
+        // Act
+        Action action = () => input.SplitBy(s => s.Equals("whatever", StringComparison.InvariantCultureIgnoreCase));
+
+        // Assert
+        action.Should().Throw<ArgumentNullException>().WithParameterName("enumerable")
+            .WithMessage("is null (Parameter 'enumerable')");
     }
 }

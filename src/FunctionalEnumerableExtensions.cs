@@ -11,14 +11,23 @@ public static class FunctionalEnumerableExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static List<T> EnsureList<T>(this IEnumerable<T> enumerable)
     {
-        if (enumerable == null)
-        {
-            throw new ArgumentNullException(nameof(enumerable), "is null");
-        }
+        enumerable.ThrowArgumentNullExceptionIfNull();
 
         var list = enumerable as List<T> ?? enumerable.ToList();
 
         return list;
+    }
+    
+    /// <summary>
+    /// Prevent the enumerable to be null
+    /// </summary>
+    /// <param name="enumerable">Enumerable to be checked for null</param>
+    /// <typeparam name="T">Type of your enumerable</typeparam>
+    /// <returns>A empty Enumerable if null otherwise the enumerable itself</returns>
+    public static IEnumerable<T> EnsureEnumerable<T>(this IEnumerable<T> enumerable)
+    {
+        // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+        return enumerable ?? Enumerable.Empty<T>();
     }
 
     /// <summary>
@@ -30,10 +39,7 @@ public static class FunctionalEnumerableExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static T[] EnsureArray<T>(this IEnumerable<T> enumerable)
     {
-        if (enumerable == null)
-        {
-            throw new ArgumentNullException(nameof(enumerable), "is null");
-        }
+        enumerable.ThrowArgumentNullExceptionIfNull();
 
         var array = enumerable as T[] ?? enumerable.ToArray();
 
@@ -49,10 +55,7 @@ public static class FunctionalEnumerableExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static HashSet<T> EnsureHashSet<T>(this IEnumerable<T> enumerable)
     {
-        if (enumerable == null)
-        {
-            throw new ArgumentNullException(nameof(enumerable), "is null");
-        }
+        enumerable.ThrowArgumentNullExceptionIfNull();
 
         return enumerable as HashSet<T> ?? new HashSet<T>(enumerable);
     }
@@ -66,10 +69,7 @@ public static class FunctionalEnumerableExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static Span<T> AsSpan<T>(this IEnumerable<T> enumerable)
     {
-        if (enumerable == null)
-        {
-            throw new ArgumentNullException(nameof(enumerable), "is null");
-        }
+        enumerable.ThrowArgumentNullExceptionIfNull();
 
         var list = enumerable.EnsureArray();
         return new Span<T>(list);
@@ -84,13 +84,44 @@ public static class FunctionalEnumerableExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static IEnumerable<T> CollectNonNulls<T>(this IEnumerable<T> enumerable)
     {
+        enumerable.ThrowArgumentNullExceptionIfNull();
+        
+        var result = enumerable.Where(o => o != null);
+
+        return result;
+    }
+    
+    /// <summary>
+    /// Splits the list according to the predicate
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <param name="predicate">Condition to be applied</param>
+    /// <typeparam name="T">Type of your list</typeparam>
+    /// <returns>A Tuple with DesiredItems that matches the predicate and RemainingItems that doesnt matches the predicate</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static (IEnumerable<T> DesiredItems, IEnumerable<T> RemainingItems) SplitBy<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+    {
+        enumerable.ThrowArgumentNullExceptionIfNull();
+        var groups = enumerable
+            .GroupBy(predicate)
+            .ToArray();
+        
+        var desiredItems = groups
+            .Where(w => w.Key)
+            .SelectMany(s => s);
+        
+        var remainingItems = groups
+            .Where(w => !w.Key)
+            .SelectMany(s => s);
+        
+        return (desiredItems, remainingItems);
+    }
+
+    private static void ThrowArgumentNullExceptionIfNull(this object? enumerable)
+    {
         if (enumerable == null)
         {
             throw new ArgumentNullException(nameof(enumerable), "is null");
         }
-
-        var result = enumerable.Where(o => o != null);
-
-        return result;
     }
 }
