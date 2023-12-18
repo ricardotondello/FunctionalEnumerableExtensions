@@ -19,7 +19,7 @@ After that import the `FunctionalEnumerableExtensions` namespace in your code fi
 
 ## Available Extension Methods 🛠️
 
-### `List<T> EnsureList<T>(this IEnumerable<T> enumerable)`
+### `EnsureList`
 
 Prevent memory allocation when converting to a list using LINQ's `.ToList()`.
 
@@ -31,7 +31,7 @@ Prevent memory allocation when converting to a list using LINQ's `.ToList()`.
 List<int> myList = myEnumerable.EnsureList();
 ```
 
-### `T[] EnsureArray<T>(this IEnumerable<T> enumerable)`
+### `EnsureArray`
 
 Prevent memory allocation when converting to an array using LINQ's `.ToArray()`.
 
@@ -43,7 +43,7 @@ Prevent memory allocation when converting to an array using LINQ's `.ToArray()`.
 T[] myArray = myEnumerable.EnsureArray();
 ```
 
-### `Span<T> AsSpan<T>(this IEnumerable<T> enumerable)`
+### `AsSpan`
 
 **Warning: DO NOT use Span if you would change the list while looping into it, it can cause exceptions.**
 
@@ -57,7 +57,7 @@ Convert the enumerable collection to a Span, suitable for in-place data processi
 Span<T> mySpan = myEnumerable.AsSpan();
 ```
 
-### HashSet<T> EnsureHashSet<T>(this IEnumerable<T> enumerable)
+### `EnsureHashSet`
 Prevent memory allocation by casting an IEnumerable to a HashSet<T> if it's already of that type, otherwise create a new HashSet<T>.
 
 Throws an ArgumentNullException if the input enumerable is null.
@@ -70,7 +70,7 @@ Throws an ArgumentNullException if the input enumerable is null.
 HashSet<T> myHashSet = myEnumerable.EnsureHashSet();
 ```
 
-### IEnumerable<T> CollectNonNulls<T>(this IEnumerable<T> enumerable)
+### `CollectNonNulls`
 Filter out non-null items from the input IEnumerable<T>.
 
 Throws an ArgumentNullException if the input enumerable is null.
@@ -80,4 +80,38 @@ Throws an ArgumentNullException if the input enumerable is null.
 **Usage:**
 ```csharp
 var myFilteredList = myEnumerable.CollectNonNulls();
+```
+
+### `EnsureEnumerable`
+Prevent the enumerable to be null.
+
+**Parameters:**
+- `enumerable` (IEnumerable<T>): The input enumerable collection.
+
+**Usage:**
+```csharp
+var myNotNullEnumerable = myEnumerable.EnsureEnumerable();
+```
+
+### `SplitBy`
+Splits the list according to the predicate.
+
+**Parameters:**
+- `enumerable` (IEnumerable<T>): The input enumerable collection.
+- `predicate` (Func<T, bool>): Condition to be applied to separate the enumerable
+
+**Usage:**
+```csharp
+var (desiredItems, remainingItems) = enumerable.SplitBy(customer => customer.LoyaltyTimeInYears > 20);
+```
+
+### `IsNullOrEmpty`
+Checks if the list is null or empty
+
+**Parameters:**
+- `enumerable` (IEnumerable<T>): The input enumerable collection.
+
+**Usage:**
+```csharp
+var result = enumerable.IsNullOrEmpty();
 ```

@@ -117,6 +117,17 @@ public static class FunctionalEnumerableExtensions
         return (desiredItems, remainingItems);
     }
 
+    /// <summary>
+    /// Checks if the list is null or empty
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <typeparam name="T">Type of your list</typeparam>
+    /// <returns>`True` if null or Empty, otherwise `false`</returns>
+    public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable)
+    {
+        return enumerable == null || !enumerable.Any();
+    }
+
     private static void ThrowArgumentNullExceptionIfNull(this object? enumerable)
     {
         if (enumerable == null)

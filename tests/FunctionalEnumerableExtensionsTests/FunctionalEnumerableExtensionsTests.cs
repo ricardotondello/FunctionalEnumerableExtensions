@@ -338,4 +338,43 @@ public class FunctionalEnumerableExtensionsTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("enumerable")
             .WithMessage("is null (Parameter 'enumerable')");
     }
+    
+    [Fact]
+    public void IsNullOrEmpty_WhenEnumerableIsNull_ShouldReturnTrue()
+    {
+        // Arrange
+        IEnumerable<string> input = null!;
+
+        // Act
+        var result = input.IsNullOrEmpty();
+        
+        // Assert
+        result.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void IsNullOrEmpty_WhenEnumerableIsEmpty_ShouldReturnTrue()
+    {
+        // Arrange
+        var input = Enumerable.Empty<string>();
+
+        // Act
+        var result = input.IsNullOrEmpty();
+        
+        // Assert
+        result.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void IsNullOrEmpty_WhenEnumerableIsNotNull_ShouldReturnFalse()
+    {
+        // Arrange
+        var input = new []{"a", "b"};
+
+        // Act
+        var result = input.IsNullOrEmpty();
+        
+        // Assert
+        result.Should().BeFalse();
+    }
 }
