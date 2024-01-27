@@ -6,114 +6,127 @@ public static class FunctionalEnumerableExtensions
     /// Prevent memory allocation, suitable for .ToList() LINQ.
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>Cast the list for its type</returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static List<T> EnsureList<T>(this IEnumerable<T> enumerable)
+    public static List<TSource> EnsureList<TSource>(this IEnumerable<TSource>? enumerable)
     {
-        enumerable.ThrowArgumentNullExceptionIfNull();
+        if (enumerable == null)
+        {
+            return new List<TSource>();
+        }
 
-        var list = enumerable as List<T> ?? enumerable.ToList();
+        var list = enumerable as List<TSource> ?? enumerable.ToList();
 
         return list;
     }
-    
+
     /// <summary>
     /// Prevent the enumerable to be null
     /// </summary>
     /// <param name="enumerable">Enumerable to be checked for null</param>
-    /// <typeparam name="T">Type of your enumerable</typeparam>
+    /// <typeparam name="TSource">Type of your enumerable</typeparam>
     /// <returns>A empty Enumerable if null otherwise the enumerable itself</returns>
-    public static IEnumerable<T> EnsureEnumerable<T>(this IEnumerable<T> enumerable)
+    public static IEnumerable<TSource> EnsureEnumerable<TSource>(this IEnumerable<TSource>? enumerable)
     {
-        // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-        return enumerable ?? Enumerable.Empty<T>();
+        return enumerable ?? Enumerable.Empty<TSource>();
     }
 
     /// <summary>
     /// Prevent memory allocation, suitable for .ToArray() LINQ.
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>Cast the list for its type</returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static T[] EnsureArray<T>(this IEnumerable<T> enumerable)
+    public static TSource[] EnsureArray<TSource>(this IEnumerable<TSource>? enumerable)
     {
-        enumerable.ThrowArgumentNullExceptionIfNull();
+        if (enumerable == null)
+        {
+            return Array.Empty<TSource>();
+        }
 
-        var array = enumerable as T[] ?? enumerable.ToArray();
+        var array = enumerable as TSource[] ?? enumerable.ToArray();
 
         return array;
     }
-    
+
     /// <summary>
     /// Prevent memory allocation, convert the enumerable to a HashSet, avoiding duplications
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>Cast or return a HashSet list for its type</returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static HashSet<T> EnsureHashSet<T>(this IEnumerable<T> enumerable)
+    public static HashSet<TSource> EnsureHashSet<TSource>(this IEnumerable<TSource>? enumerable)
     {
-        enumerable.ThrowArgumentNullExceptionIfNull();
+        if (enumerable == null)
+        {
+            return new HashSet<TSource>();
+        }
 
-        return enumerable as HashSet<T> ?? new HashSet<T>(enumerable);
+        return enumerable as HashSet<TSource> ?? new HashSet<TSource>(enumerable);
     }
 
     /// <summary>
     /// Warning: DO NOT use Span if you would change the list while looping into it, it can cause exceptions 
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>return a Span of your list</returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static Span<T> AsSpan<T>(this IEnumerable<T> enumerable)
+    public static Span<TSource> AsSpan<TSource>(this IEnumerable<TSource>? enumerable)
     {
-        enumerable.ThrowArgumentNullExceptionIfNull();
+        if (enumerable == null)
+        {
+            return new Span<TSource>();
+        }
 
         var list = enumerable.EnsureArray();
-        return new Span<T>(list);
+        return new Span<TSource>(list);
     }
 
     /// <summary>
     /// Filter the non nulls items in the enumerable provided
     /// </summary>
     /// <param name="enumerable">Enumerable to be filtered</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>Returns the enumerable filtered</returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static IEnumerable<T> CollectNonNulls<T>(this IEnumerable<T> enumerable)
+    public static IEnumerable<TSource> CollectNonNulls<TSource>(this IEnumerable<TSource>? enumerable)
     {
-        enumerable.ThrowArgumentNullExceptionIfNull();
-        
+        if (enumerable == null)
+        {
+            return Enumerable.Empty<TSource>();
+        }
+
         var result = enumerable.Where(o => o != null);
 
         return result;
     }
-    
+
     /// <summary>
     /// Splits the list according to the predicate
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="predicate">Condition to be applied</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>A Tuple with DesiredItems that matches the predicate and RemainingItems that doesnt matches the predicate</returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static (IEnumerable<T> DesiredItems, IEnumerable<T> RemainingItems) SplitBy<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+    public static (IEnumerable<TSource> DesiredItems, IEnumerable<TSource> RemainingItems) SplitBy<TSource>(
+        this IEnumerable<TSource>? enumerable, Func<TSource, bool> predicate)
     {
-        enumerable.ThrowArgumentNullExceptionIfNull();
+        if (enumerable == null)
+        {
+            return (Enumerable.Empty<TSource>(), Enumerable.Empty<TSource>());
+        }
+
         var groups = enumerable
             .GroupBy(predicate)
             .ToArray();
-        
+
         var desiredItems = groups
             .Where(w => w.Key)
             .SelectMany(s => s);
-        
+
         var remainingItems = groups
             .Where(w => !w.Key)
             .SelectMany(s => s);
-        
+
         return (desiredItems, remainingItems);
     }
 
@@ -121,18 +134,29 @@ public static class FunctionalEnumerableExtensions
     /// Checks if the list is null or empty
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
-    /// <typeparam name="T">Type of your list</typeparam>
+    /// <typeparam name="TSource">Type of your source</typeparam>
     /// <returns>`True` if null or Empty, otherwise `false`</returns>
-    public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable)
+    public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource>? enumerable)
     {
         return enumerable == null || !enumerable.Any();
     }
 
-    private static void ThrowArgumentNullExceptionIfNull(this object? enumerable)
+    /// <summary>
+    /// Optional filtering criteria, Avoids if statements when building predicates & lambdas for a query
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <param name="condition">Boolean</param>
+    /// <param name="predicate">Where condition to be apply if condition is true, otherwise the enumerable</param>
+    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <returns></returns>
+    public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource>? enumerable, bool condition,
+        Func<TSource, bool> predicate)
     {
         if (enumerable == null)
         {
-            throw new ArgumentNullException(nameof(enumerable), "is null");
+            return Enumerable.Empty<TSource>();
         }
+
+        return condition ? enumerable.Where(predicate) : enumerable;
     }
 }
