@@ -3,15 +3,13 @@ namespace FunctionalEnumerableExtensionsTests;
 public class FunctionalEnumerableExtensionsTests
 {
     [Fact]
-    public void EnsureList_WithNull_ThrowsArgumentNullException()
+    public void EnsureList_WithNull_ShouldNotThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
         Action action = () => input.EnsureList();
 
-        action.Should().Throw<ArgumentNullException>()
-            .WithParameterName("enumerable")
-            .WithMessage("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -47,27 +45,23 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
-    public void EnsureList_WithNullEnumerable_ThrowsArgumentNullException()
+    public void EnsureList_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
         Action action = () => input.EnsureList();
 
-        action.Should().Throw<ArgumentNullException>()
-            .WithMessage("is null (Parameter 'enumerable')")
-            .And.ParamName.Should().Be("enumerable");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
-    public void EnsureArray_WithNull_ThrowsArgumentNullException()
+    public void EnsureArray_WithNull_ShouldNotThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
         Action action = () => input.EnsureArray();
 
-        action.Should().Throw<ArgumentNullException>()
-            .WithParameterName("enumerable")
-            .WithMessage("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -91,27 +85,23 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
-    public void EnsureArray_WithNullEnumerable_ThrowsArgumentNullException()
+    public void EnsureArray_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
         Action action = () => input.EnsureArray();
 
-        action.Should().Throw<ArgumentNullException>()
-            .WithMessage("is null (Parameter 'enumerable')")
-            .WithParameterName("enumerable");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
-    public void AsSpan_WithNull_ThrowsArgumentNullException()
+    public void AsSpan_WithNull_ShouldNotThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
         Action action = () => input.AsSpan();
 
-        action.Should().Throw<ArgumentNullException>()
-            .WithParameterName("enumerable")
-            .WithMessage("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -135,20 +125,18 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
-    public void AsSpan_WithNullEnumerable_ThrowsArgumentNullException()
+    public void AsSpan_WithNullEnumerable_ShouldNotThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
         Action action = () => input.AsSpan();
 
-        action.Should().Throw<ArgumentNullException>()
-            .And.ParamName.Should().Be("enumerable");
-        action.Should().Throw<ArgumentNullException>()
-            .And.Message.Should().Be("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
+        action.Should().NotThrow<ArgumentNullException>();
     }
     
     [Fact]
-    public void CollectNonNulls_WithNullInput_ThrowsArgumentNullException()
+    public void CollectNonNulls_WithNullInput_ShouldNotThrowsArgumentNullException()
     {
         // Arrange
         IEnumerable<object> input = null!;
@@ -157,9 +145,7 @@ public class FunctionalEnumerableExtensionsTests
         Action action = () => input.CollectNonNulls();
 
         // Assert
-        action.Should().Throw<ArgumentNullException>()
-            .WithParameterName("enumerable")
-            .WithMessage("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -202,7 +188,7 @@ public class FunctionalEnumerableExtensionsTests
     }
     
     [Fact]
-    public void EnsureHashSet_WithNullInput_ThrowsArgumentNullException()
+    public void EnsureHashSet_WithNullInput_ShouldNotThrowsArgumentNullException()
     {
         // Arrange
         IEnumerable<object> input = null!;
@@ -211,9 +197,7 @@ public class FunctionalEnumerableExtensionsTests
         Action action = () => input.EnsureHashSet();
 
         // Assert
-        action.Should().Throw<ArgumentNullException>()
-            .WithParameterName("enumerable")
-            .WithMessage("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -326,7 +310,7 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
-    public void SplitBy_WhenEnumerableIsNull_ThrowsArgumentNullException()
+    public void SplitBy_WhenEnumerableIsNull_ShouldNotTThrowsArgumentNullException()
     {
         // Arrange
         IEnumerable<string> input = null!;
@@ -335,8 +319,7 @@ public class FunctionalEnumerableExtensionsTests
         Action action = () => input.SplitBy(s => s.Equals("whatever", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
-        action.Should().Throw<ArgumentNullException>().WithParameterName("enumerable")
-            .WithMessage("is null (Parameter 'enumerable')");
+        action.Should().NotThrow<ArgumentNullException>();
     }
     
     [Fact]
@@ -376,5 +359,43 @@ public class FunctionalEnumerableExtensionsTests
         
         // Assert
         result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void WhereIf_WhenConditionIsTrue_ShouldApplyWhereToTheEnumerable()
+    {
+        //Arrange
+        var list = new[] { 1, 2, 3 };
+
+        //Act
+
+        var result = list.WhereIf(true, w => w > 2);
+
+        //Assert
+        result.Should().Contain(new[] { 3 });
+    }
+    
+    [Fact]
+    public void WhereIf_WhenConditionIsFalse_ShouldAReturnTheEnumerableItSelf()
+    {
+        //Arrange
+        var list = new[] { 1, 2, 3 };
+
+        //Act
+
+        var result = list.WhereIf(false, w => w > 2);
+
+        //Assert
+        result.Should().Contain(new[] {1, 2, 3 });
+    }
+    
+    [Fact]
+    public void WhereIf_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
+    {
+        IEnumerable<int> input = null!;
+
+        Action action = () => input.WhereIf(true, w => w > 0);
+
+        action.Should().NotThrow<ArgumentNullException>();
     }
 }
