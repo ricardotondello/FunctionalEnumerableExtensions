@@ -1,7 +1,16 @@
+using Xunit.Abstractions;
+
 namespace FunctionalEnumerableExtensionsTests;
 
 public class FunctionalEnumerableExtensionsTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public FunctionalEnumerableExtensionsTests(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
+
     [Fact]
     public void EnsureList_WithNull_ShouldNotThrowsArgumentNullException()
     {
@@ -21,7 +30,7 @@ public class FunctionalEnumerableExtensionsTests
 
         result.Should().BeSameAs(input);
     }
-    
+
     [Fact]
     public void EnsureList_WithEmptyList_ReturnsEmptyList()
     {
@@ -45,13 +54,13 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
-    public void EnsureList_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
+    public void EnsureList_WithNullEnumerable_ShouldReturnEmptyList()
     {
         IEnumerable<int> input = null!;
 
-        Action action = () => input.EnsureList();
+        var result= input.EnsureList();
 
-        action.Should().NotThrow<ArgumentNullException>();
+        result.Should().BeEmpty();
     }
 
     [Fact]
@@ -85,13 +94,13 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
-    public void EnsureArray_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
+    public void EnsureArray_WithNullEnumerable_ShouldBeEmpty()
     {
         IEnumerable<int> input = null!;
 
-        Action action = () => input.EnsureArray();
+        var result = input.EnsureArray();
 
-        action.Should().NotThrow<ArgumentNullException>();
+        result.Should().BeEmpty();
     }
 
     [Fact]
@@ -134,7 +143,7 @@ public class FunctionalEnumerableExtensionsTests
         action.Should().NotThrow<ArgumentNullException>();
         action.Should().NotThrow<ArgumentNullException>();
     }
-    
+
     [Fact]
     public void CollectNonNulls_WithNullInput_ShouldNotThrowsArgumentNullException()
     {
@@ -171,7 +180,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.CollectNonNulls();
 
         // Assert
-        result.Should().BeEquivalentTo(new [] {1, 3, 5});
+        result.Should().BeEquivalentTo(new[] { 1, 3, 5 });
     }
 
     [Fact]
@@ -186,7 +195,7 @@ public class FunctionalEnumerableExtensionsTests
         // Assert
         result.Should().BeEmpty();
     }
-    
+
     [Fact]
     public void EnsureHashSet_WithNullInput_ShouldNotThrowsArgumentNullException()
     {
@@ -240,7 +249,7 @@ public class FunctionalEnumerableExtensionsTests
         // Assert
         result.Should().BeEmpty();
     }
-    
+
     [Fact]
     public void EnsureEnumerable_Null_ReturnsEmptyEnumerable()
     {
@@ -253,12 +262,12 @@ public class FunctionalEnumerableExtensionsTests
         // Assert
         result.Should().BeSameAs(Enumerable.Empty<string>());
     }
-    
+
     [Fact]
     public void EnsureEnumerable_NotNull_ReturnsEnumerableItSelf()
     {
         // Arrange
-        IEnumerable<string> input = new []{"a", "b"};
+        IEnumerable<string> input = new[] { "a", "b" };
 
         // Act
         var result = input.EnsureEnumerable();
@@ -266,46 +275,47 @@ public class FunctionalEnumerableExtensionsTests
         // Assert
         result.Should().BeSameAs(input);
     }
-    
+
     [Fact]
     public void SplitBy_WhenPredicateMatch_ReturnsBothLists()
     {
         // Arrange
-        var input = new []{"a", "b", "b", "c"};
+        var input = new[] { "a", "b", "b", "c" };
 
         // Act
         var result = input.SplitBy(s => s.Equals("b", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
-        result.DesiredItems.Should().Contain(new []{"b", "b"});
-        result.RemainingItems.Should().Contain(new []{"a", "c"});
+        result.DesiredItems.Should().Contain(new[] { "b", "b" });
+        result.RemainingItems.Should().Contain(new[] { "a", "c" });
     }
-    
+
     [Fact]
     public void SplitBy_WhenPredicateDoesntMatch_ReturnsBothListsWithDesiredEmpty()
     {
         // Arrange
-        var input = new []{"a", "b", "b", "c"};
+        var input = new[] { "a", "b", "b", "c" };
 
         // Act
-        var (desiredItems, remainingItems) = input.SplitBy(s => s.Equals("d", StringComparison.InvariantCultureIgnoreCase));
+        var (desiredItems, remainingItems) =
+            input.SplitBy(s => s.Equals("d", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
         desiredItems.Should().BeEmpty();
-        remainingItems.Should().Contain(new []{"a", "b", "b","c"});
+        remainingItems.Should().Contain(new[] { "a", "b", "b", "c" });
     }
-    
+
     [Fact]
     public void SplitBy_WhenPredicateMatchesAll_ReturnsBothListsWithRemainingEmpty()
     {
         // Arrange
-        var input = new []{"a", "a", "a", "a"};
+        var input = new[] { "a", "a", "a", "a" };
 
         // Act
         var result = input.SplitBy(s => s.Equals("a", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
-        result.DesiredItems.Should().Contain(new []{"a", "a", "a", "a"});
+        result.DesiredItems.Should().Contain(new[] { "a", "a", "a", "a" });
         result.RemainingItems.Should().BeEmpty();
     }
 
@@ -321,7 +331,7 @@ public class FunctionalEnumerableExtensionsTests
         // Assert
         action.Should().NotThrow<ArgumentNullException>();
     }
-    
+
     [Fact]
     public void IsNullOrEmpty_WhenEnumerableIsNull_ShouldReturnTrue()
     {
@@ -330,11 +340,11 @@ public class FunctionalEnumerableExtensionsTests
 
         // Act
         var result = input.IsNullOrEmpty();
-        
+
         // Assert
         result.Should().BeTrue();
     }
-    
+
     [Fact]
     public void IsNullOrEmpty_WhenEnumerableIsEmpty_ShouldReturnTrue()
     {
@@ -343,20 +353,20 @@ public class FunctionalEnumerableExtensionsTests
 
         // Act
         var result = input.IsNullOrEmpty();
-        
+
         // Assert
         result.Should().BeTrue();
     }
-    
+
     [Fact]
     public void IsNullOrEmpty_WhenEnumerableIsNotNull_ShouldReturnFalse()
     {
         // Arrange
-        var input = new []{"a", "b"};
+        var input = new[] { "a", "b" };
 
         // Act
         var result = input.IsNullOrEmpty();
-        
+
         // Assert
         result.Should().BeFalse();
     }
@@ -374,7 +384,7 @@ public class FunctionalEnumerableExtensionsTests
         //Assert
         result.Should().Contain(new[] { 3 });
     }
-    
+
     [Fact]
     public void WhereIf_WhenConditionIsFalse_ShouldAReturnTheEnumerableItSelf()
     {
@@ -382,20 +392,97 @@ public class FunctionalEnumerableExtensionsTests
         var list = new[] { 1, 2, 3 };
 
         //Act
-
         var result = list.WhereIf(false, w => w > 2);
 
         //Assert
-        result.Should().Contain(new[] {1, 2, 3 });
+        result.Should().Contain(new[] { 1, 2, 3 });
     }
-    
+
     [Fact]
     public void WhereIf_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
     {
+        //Arrange
         IEnumerable<int> input = null!;
 
+        //Act
         Action action = () => input.WhereIf(true, w => w > 0);
 
+        //Assert
         action.Should().NotThrow<ArgumentNullException>();
     }
+
+    [Fact]
+    public void Each_WithNullEnumerable_ShouldNotTThrowsArgumentNullException()
+    {
+        //Arrange
+        IEnumerable<int> input = null!;
+
+        //Act
+        Action action = () => input.Each(a => { _ = a.ToString(); });
+
+        //Assert
+        action.Should().NotThrow<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Each_ShouldExecuteTheActionForItems()
+    {
+        //Arrange
+        var list = new[] { 1, 2, 3 };
+        var doubleList = new List<int>();
+
+        //Act
+        list.Each(item => { doubleList.Add(item * 2); });
+
+        //Assert
+        doubleList.Should().Contain(new[] { 2, 4, 6 });
+    }
+
+    [Fact]
+    public void Stringify_ShouldReturnAStringWithTheElements()
+    {
+        //Arrange
+        var dob = new DateTime(2024, 01, 28, 15, 44, 20, DateTimeKind.Utc);
+        var list = Enumerable.Range(0, 2).Select(s => new MyClass(
+            Name: $"My Name is {s}",
+            Age: s,
+            Dob: dob,
+            Classes: Enumerable.Range(1, 3)
+                .Select(s1 => new MyClass(Name: $"child {s1}", Age: s1, Dob: null, Classes: null))
+        )).ToList();
+
+        list.Add(null!);
+
+        //Act
+        var result = list.Stringify();
+
+        //Assert
+        _testOutputHelper.WriteLine($"result was :{result}");
+        var stringDob = $"{dob}";
+        result.Should()
+            .Be(
+                "{ \"Name\": \"My Name is 0\", \"Age\": \"0\", \"Dob\": \""+stringDob+"\", " +
+                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": \"1\", \"Dob\": \"\", \"Classes\": null }, " +
+                "{ \"Name\": \"child 2\", \"Age\": \"2\", \"Dob\": \"\", \"Classes\": null }, " +
+                "{ \"Name\": \"child 3\", \"Age\": \"3\", \"Dob\": \"\", \"Classes\": null }] }, " +
+                "{ \"Name\": \"My Name is 1\", \"Age\": \"1\", \"Dob\": \""+stringDob+"\", " +
+                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": \"1\", \"Dob\": \"\", \"Classes\": null }, " +
+                "{ \"Name\": \"child 2\", \"Age\": \"2\", \"Dob\": \"\", \"Classes\": null }, " +
+                "{ \"Name\": \"child 3\", \"Age\": \"3\", \"Dob\": \"\", \"Classes\": null }] }");
+    }
+
+    [Fact]
+    public void Stringify_WithNullEnumerable_ShouldReturnEmpty()
+    {
+        //Arrange
+        IEnumerable<MyClass> input = null!;
+
+        //Act
+        var result = input.Stringify();
+
+        //Assert
+        result.Should().BeEmpty();
+    }
 }
+
+internal record MyClass(string? Name, int Age, DateTime? Dob, IEnumerable<MyClass>? Classes);

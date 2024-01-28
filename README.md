@@ -19,9 +19,9 @@ and updating libraries in your applications.
 
 After that import the `FunctionalEnumerableExtensions` namespace in your code files where you want to use the provided extension methods:
 
-   ```csharp
-   using FunctionalEnumerableExtensions;
-   ```
+```csharp
+using FunctionalEnumerableExtensions;
+```
 
 ## Available Extension Methods 🛠️
 
@@ -55,9 +55,8 @@ Span<T> mySpan = myEnumerable.AsSpan();
 ```
 
 ### `EnsureHashSet`
-Prevent memory allocation by casting an IEnumerable to a HashSet<T> if it's already of that type, otherwise create a new HashSet<T>.
 
-Throws an ArgumentNullException if the input enumerable is null.
+Prevent memory allocation by casting an IEnumerable to a HashSet<T> if it's already of that type, otherwise create a new HashSet<T>.
 
 **Usage:**
 ```csharp
@@ -65,9 +64,8 @@ HashSet<T> myHashSet = myEnumerable.EnsureHashSet();
 ```
 
 ### `CollectNonNulls`
-Filter out non-null items from the input IEnumerable<T>.
 
-Throws an ArgumentNullException if the input enumerable is null.
+Filter out non-null items from the input IEnumerable<T>.
 
 **Usage:**
 ```csharp
@@ -75,6 +73,7 @@ var myFilteredList = myEnumerable.CollectNonNulls();
 ```
 
 ### `EnsureEnumerable`
+
 Prevent the enumerable to be null.
 
 **Usage:**
@@ -83,6 +82,7 @@ var myNotNullEnumerable = myEnumerable.EnsureEnumerable();
 ```
 
 ### `SplitBy`
+
 Splits the list according to the predicate.
 
 **Usage:**
@@ -91,6 +91,7 @@ var (desiredItems, remainingItems) = enumerable.SplitBy(customer => customer.Loy
 ```
 
 ### `IsNullOrEmpty`
+
 Checks if the list is null or empty
 
 **Usage:**
@@ -99,11 +100,21 @@ var result = enumerable.IsNullOrEmpty();
 ```
 
 ### `WhereIf`
+
 Introduces optional filtering, applying a predicate only if a specified condition holds true.
 
 **Usage:**
 ```csharp
 var result = enumerable.WhereIf(YourBooleanCondition(), w => w > 0);
+```
+
+### `Stringify`
+
+Converts a collection of non-null objects to a string by concatenating their properties recursively, separated by commas.
+
+**Usage:**
+```csharp
+var result = enumerable.Stringify();
 ```
 
 ## Contributing 👥
