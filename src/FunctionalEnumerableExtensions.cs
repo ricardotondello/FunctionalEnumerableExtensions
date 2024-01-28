@@ -1,4 +1,7 @@
-﻿namespace FunctionalEnumerableExtensions;
+﻿using System.Collections;
+using System.Text;
+
+namespace FunctionalEnumerableExtensions;
 
 public static class FunctionalEnumerableExtensions
 {
@@ -158,5 +161,116 @@ public static class FunctionalEnumerableExtensions
         }
 
         return condition ? enumerable.Where(predicate) : enumerable;
+    }
+
+    /// <summary>
+    /// Iterate the list and executes an actions for each item
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <param name="action">Action to be executed for each item of the list</param>
+    /// <typeparam name="TSource">Type of your source</typeparam>
+    public static void Each<TSource>(this IEnumerable<TSource>? enumerable, Action<TSource> action)
+    {
+        if (enumerable == null)
+        {
+            return;
+        }
+
+        foreach (var item in enumerable)
+        {
+            action(item);
+        }
+    }
+
+    /// <summary>
+    /// This method converts a collection of non-null objects to a string by concatenating their properties recursively, separated by commas.
+    /// If the input collection is null, an empty string is returned.
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <returns></returns>
+    public static string Stringify<TSource>(this IEnumerable<TSource>? enumerable) where TSource : class
+    {
+        if (enumerable == null)
+        {
+            return string.Empty;
+        }
+
+        var cached = enumerable.CollectNonNulls().EnsureList();
+
+        var sb = new StringBuilder(cached.Count * 10);
+        for (var i = 0; i < cached.Count; i++)
+        {
+            var item = cached[i];
+
+            AddPropertiesRecursively(item, sb);
+            MaybeAppendComma(i, cached.Count, sb);
+        }
+
+        return sb.ToString();
+    }
+
+    private static void MaybeAppendComma(int currentIndex, int indexLength, StringBuilder sb)
+    {
+        if (currentIndex != indexLength - 1)
+        {
+            sb.Append(", ");
+        }
+    }
+    
+    private static void AddPropertiesRecursively(object obj, StringBuilder sb)
+    {
+        sb.Append("{ ");
+        var objType = obj.GetType();
+        var properties = objType.GetProperties();
+        for (var propertyIndex = 0; propertyIndex < properties.Length; propertyIndex++)
+        {
+            var property = properties[propertyIndex];
+            var propValue = property.GetValue(obj, null);
+
+            sb.Append($"\"{property.Name}\": ");
+
+            if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
+            {
+                sb.Append($"\"{propValue}\"");
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+            {
+                var enumerable = (IEnumerable)propValue;
+
+                IterateChild(enumerable);
+            }
+            else
+            {
+                sb.Append($"\"{propValue}\"");
+            }
+
+            MaybeAppendComma(propertyIndex, properties.Length, sb);
+        }
+
+        sb.Append(" }");
+        
+        void IterateChild(IEnumerable? enumerable)
+        {
+            if (enumerable == null)
+            {
+                sb.Append("null");
+                return;
+            }
+
+            sb.Append("[");
+            
+            var children = enumerable.Cast<object>().EnsureList();
+
+            for (var childIndex = 0; childIndex < children.Count; childIndex++)
+            {
+                var child = children[childIndex];
+                AddPropertiesRecursively(child, sb);
+                
+                MaybeAppendComma(childIndex, children.Count, sb);
+            }
+
+            sb.Append("]");
+        }
     }
 }
