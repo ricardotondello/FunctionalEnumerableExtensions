@@ -210,6 +210,25 @@ public static class FunctionalEnumerableExtensions
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Enumerate an IEnumerable source and getting the Index and the Item returned in a ValueTuple.
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <returns></returns>
+    public static IEnumerable<(int Index, TSource Item)> EnumerateWithIndex<TSource>(this IEnumerable<TSource>? enumerable)
+    {
+        if (enumerable == null)
+        {
+            yield break;
+        }
+        
+        var index = 0;
+        foreach (var item in enumerable) {
+            yield return (index++, item);
+        }
+    }
+
     private static void MaybeAppendComma(int currentIndex, int indexLength, StringBuilder sb)
     {
         if (currentIndex != indexLength - 1)

@@ -117,6 +117,15 @@ Converts a collection of non-null objects to a string by concatenating their pro
 var result = enumerable.Stringify();
 ```
 
+### `EnumerateWithIndex`
+
+Enumerate an IEnumerable source and getting the Index and the Item returned in a ValueTuple.
+
+**Usage**
+```csharp
+var result = enumerable.EnumerateWithIndex();
+```
+
 ## Contributing 👥
 
 Contributions are welcome! If you find a bug or have a feature request, please open an issue on GitHub.
