@@ -110,3 +110,12 @@ Converts a collection of non-null objects to a string by concatenating their pro
 ```csharp
 var result = enumerable.Stringify();
 ```
+
+### `EnumerateWithIndex`
+
+Enumerate an IEnumerable source and getting the Index and the Item returned in a ValueTuple.
+
+**Usage**
+```csharp
+var result = enumerable.EnumerateWithIndex();
+```

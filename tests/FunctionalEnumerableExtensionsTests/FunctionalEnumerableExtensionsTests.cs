@@ -483,6 +483,43 @@ public class FunctionalEnumerableExtensionsTests
         //Assert
         result.Should().BeEmpty();
     }
+
+    [Fact]
+    public void EnumerateWithIndex_WithValidEnumerable_ShouldEnumerateWithIndexes()
+    {
+        //Arrange
+        var list = new List<MyClass>()
+        {
+            new ("Name1", 21, DateTime.UtcNow, null),
+            new ("Name2", 21, DateTime.UtcNow, null),
+            new ("Name3", 21, DateTime.UtcNow, null),
+            new ("Name4", 21, DateTime.UtcNow, null)
+        };
+        
+        //Act
+        var listWithIndex = list.EnumerateWithIndex();
+        
+        //Assert
+        var indexCheck = 0;
+        foreach (var (index, item) in listWithIndex)
+        {
+            index.Should().Be(indexCheck++);
+            item.Should().NotBeNull();
+        }
+    }
+    
+    [Fact]
+    public void EnumerateWithIndex_WithInvalidEnumerable_ShouldYieldBreak()
+    {
+        //Arrange
+        IEnumerable<MyClass> list = null!;
+        
+        //Act
+        var listWithIndex = list.EnumerateWithIndex();
+        
+        //Assert
+        listWithIndex.Should().BeEmpty();
+    }
 }
 
 internal record MyClass(string? Name, int Age, DateTime? Dob, IEnumerable<MyClass>? Classes);
