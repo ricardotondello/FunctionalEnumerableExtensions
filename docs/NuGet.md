@@ -119,3 +119,12 @@ Enumerate an IEnumerable source and getting the Index and the Item returned in a
 ```csharp
 var result = enumerable.EnumerateWithIndex();
 ```
+
+### `JoinString`
+
+Chainable method that joins the separator string with the items of your Enumerable.
+
+**Usage**
+```csharp
+var result = list.Select(s => s.Name).JoinString();
+```
