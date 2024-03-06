@@ -151,7 +151,7 @@ public static class FunctionalEnumerableExtensions
     /// <param name="condition">Boolean</param>
     /// <param name="predicate">Where condition to be apply if condition is true, otherwise the enumerable</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
-    /// <returns></returns>
+    /// <returns>The Enumerable when condition is `True` otherwise Empty Enumerable</returns>
     public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource>? enumerable, bool condition,
         Func<TSource, bool> predicate)
     {
@@ -188,7 +188,7 @@ public static class FunctionalEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
-    /// <returns></returns>
+    /// <returns>A string similar to JSON</returns>
     public static string Stringify<TSource>(this IEnumerable<TSource>? enumerable) where TSource : class
     {
         if (enumerable == null)
@@ -215,7 +215,7 @@ public static class FunctionalEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
-    /// <returns></returns>
+    /// <returns>A Tuple list with Index for each element of your enumerable</returns>
     public static IEnumerable<(int Index, TSource Item)> EnumerateWithIndex<TSource>(this IEnumerable<TSource>? enumerable)
     {
         if (enumerable == null)
@@ -235,7 +235,7 @@ public static class FunctionalEnumerableExtensions
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="separator">String wanted to separate the elements</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
-    /// <returns></returns>
+    /// <returns>A string concatenating each element with separator value</returns>
     public static string JoinString<TSource>(this IEnumerable<TSource>? enumerable, string separator = ",") =>
         enumerable == null 
             ? string.Empty 
