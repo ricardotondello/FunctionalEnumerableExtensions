@@ -488,7 +488,7 @@ public class FunctionalEnumerableExtensionsTests
     public void EnumerateWithIndex_WithValidEnumerable_ShouldEnumerateWithIndexes()
     {
         //Arrange
-        var list = new List<MyClass>()
+        var list = new List<MyClass>
         {
             new ("Name1", 21, DateTime.UtcNow, null),
             new ("Name2", 21, DateTime.UtcNow, null),
@@ -519,6 +519,38 @@ public class FunctionalEnumerableExtensionsTests
         
         //Assert
         listWithIndex.Should().BeEmpty();
+    }
+    
+    [Fact]
+    public void JoinString_WithValidEnumerable_ShouldReturnJoinedValue()
+    {
+        //Arrange
+        var list = new List<MyClass>
+        {
+            new ("Name1", 21, DateTime.UtcNow, null),
+            new ("Name2", 21, DateTime.UtcNow, null),
+            new ("Name3", 21, DateTime.UtcNow, null),
+            new ("Name4", 21, DateTime.UtcNow, null)
+        };
+        
+        //Act
+        var result = list.Select(s => s.Name).JoinString();
+        
+        //Assert
+        result.Should().Be("Name1,Name2,Name3,Name4");
+    }
+    
+    [Fact]
+    public void JoinString_WithInvalidEnumerable_ShouldReturnEmptyString()
+    {
+        //Arrange
+        List<string> list = null!;
+        
+        //Act
+        var result = list.JoinString();
+        
+        //Assert
+        result.Should().BeEmpty();
     }
 }
 

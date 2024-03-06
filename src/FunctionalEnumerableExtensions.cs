@@ -9,7 +9,7 @@ public static class FunctionalEnumerableExtensions
     /// Prevent memory allocation, suitable for .ToList() LINQ.
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>Cast the list for its type</returns>
     public static List<TSource> EnsureList<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -38,7 +38,7 @@ public static class FunctionalEnumerableExtensions
     /// Prevent memory allocation, suitable for .ToArray() LINQ.
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>Cast the list for its type</returns>
     public static TSource[] EnsureArray<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -56,7 +56,7 @@ public static class FunctionalEnumerableExtensions
     /// Prevent memory allocation, convert the enumerable to a HashSet, avoiding duplications
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>Cast or return a HashSet list for its type</returns>
     public static HashSet<TSource> EnsureHashSet<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -72,7 +72,7 @@ public static class FunctionalEnumerableExtensions
     /// Warning: DO NOT use Span if you would change the list while looping into it, it can cause exceptions 
     /// </summary>
     /// <param name="enumerable">Enumerable to be converted</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>return a Span of your list</returns>
     public static Span<TSource> AsSpan<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -89,7 +89,7 @@ public static class FunctionalEnumerableExtensions
     /// Filter the non nulls items in the enumerable provided
     /// </summary>
     /// <param name="enumerable">Enumerable to be filtered</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>Returns the enumerable filtered</returns>
     public static IEnumerable<TSource> CollectNonNulls<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -108,7 +108,7 @@ public static class FunctionalEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="predicate">Condition to be applied</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>A Tuple with DesiredItems that matches the predicate and RemainingItems that doesnt matches the predicate</returns>
     public static (IEnumerable<TSource> DesiredItems, IEnumerable<TSource> RemainingItems) SplitBy<TSource>(
         this IEnumerable<TSource>? enumerable, Func<TSource, bool> predicate)
@@ -137,7 +137,7 @@ public static class FunctionalEnumerableExtensions
     /// Checks if the list is null or empty
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>`True` if null or Empty, otherwise `false`</returns>
     public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -150,7 +150,7 @@ public static class FunctionalEnumerableExtensions
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="condition">Boolean</param>
     /// <param name="predicate">Where condition to be apply if condition is true, otherwise the enumerable</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns></returns>
     public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource>? enumerable, bool condition,
         Func<TSource, bool> predicate)
@@ -168,7 +168,7 @@ public static class FunctionalEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="action">Action to be executed for each item of the list</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     public static void Each<TSource>(this IEnumerable<TSource>? enumerable, Action<TSource> action)
     {
         if (enumerable == null)
@@ -187,7 +187,7 @@ public static class FunctionalEnumerableExtensions
     /// If the input collection is null, an empty string is returned.
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns></returns>
     public static string Stringify<TSource>(this IEnumerable<TSource>? enumerable) where TSource : class
     {
@@ -214,7 +214,7 @@ public static class FunctionalEnumerableExtensions
     /// Enumerate an IEnumerable source and getting the Index and the Item returned in a ValueTuple.
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
-    /// <typeparam name="TSource">Type of your source</typeparam>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns></returns>
     public static IEnumerable<(int Index, TSource Item)> EnumerateWithIndex<TSource>(this IEnumerable<TSource>? enumerable)
     {
@@ -228,6 +228,18 @@ public static class FunctionalEnumerableExtensions
             yield return (index++, item);
         }
     }
+
+    /// <summary>
+    /// Chainable method that joins the separator string with the items of your Enumerable.
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <param name="separator">String wanted to separate the elements</param>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
+    /// <returns></returns>
+    public static string JoinString<TSource>(this IEnumerable<TSource>? enumerable, string separator = ",") =>
+        enumerable == null 
+            ? string.Empty 
+            : string.Join(separator, enumerable);
 
     private static void MaybeAppendComma(int currentIndex, int indexLength, StringBuilder sb)
     {
