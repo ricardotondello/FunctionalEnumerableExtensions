@@ -461,14 +461,14 @@ public class FunctionalEnumerableExtensionsTests
         var stringDob = $"{dob}";
         result.Should()
             .Be(
-                "{ \"Name\": \"My Name is 0\", \"Age\": \"0\", \"Dob\": \""+stringDob+"\", " +
-                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": \"1\", \"Dob\": \"\", \"Classes\": null }, " +
-                "{ \"Name\": \"child 2\", \"Age\": \"2\", \"Dob\": \"\", \"Classes\": null }, " +
-                "{ \"Name\": \"child 3\", \"Age\": \"3\", \"Dob\": \"\", \"Classes\": null }] }, " +
-                "{ \"Name\": \"My Name is 1\", \"Age\": \"1\", \"Dob\": \""+stringDob+"\", " +
-                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": \"1\", \"Dob\": \"\", \"Classes\": null }, " +
-                "{ \"Name\": \"child 2\", \"Age\": \"2\", \"Dob\": \"\", \"Classes\": null }, " +
-                "{ \"Name\": \"child 3\", \"Age\": \"3\", \"Dob\": \"\", \"Classes\": null }] }");
+                "{ \"Name\": \"My Name is 0\", \"Age\": 0, \"Dob\": "+stringDob+", " +
+                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": 1, \"Dob\": null, \"Classes\": null }, " +
+                "{ \"Name\": \"child 2\", \"Age\": 2, \"Dob\": null, \"Classes\": null }, " +
+                "{ \"Name\": \"child 3\", \"Age\": 3, \"Dob\": null, \"Classes\": null }] }, " +
+                "{ \"Name\": \"My Name is 1\", \"Age\": 1, \"Dob\": "+stringDob+", " +
+                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": 1, \"Dob\": null, \"Classes\": null }, " +
+                "{ \"Name\": \"child 2\", \"Age\": 2, \"Dob\": null, \"Classes\": null }, " +
+                "{ \"Name\": \"child 3\", \"Age\": 3, \"Dob\": null, \"Classes\": null }] }");
     }
 
     [Fact]

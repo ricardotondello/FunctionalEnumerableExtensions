@@ -196,18 +196,12 @@ public static class FunctionalEnumerableExtensions
             return string.Empty;
         }
 
-        var cached = enumerable.CollectNonNulls().EnsureList();
-
-        var sb = new StringBuilder(cached.Count * 10);
-        for (var i = 0; i < cached.Count; i++)
-        {
-            var item = cached[i];
-
-            AddPropertiesRecursively(item, sb);
-            MaybeAppendComma(i, cached.Count, sb);
-        }
-
-        return sb.ToString();
+        var items = enumerable
+            .CollectNonNulls()
+            .EnsureList()
+            .Select(StringifyObject);
+        
+        return items.JoinString(", ");
     }
 
     /// <summary>
@@ -240,68 +234,44 @@ public static class FunctionalEnumerableExtensions
         enumerable == null 
             ? string.Empty 
             : string.Join(separator, enumerable);
-
-    private static void MaybeAppendComma(int currentIndex, int indexLength, StringBuilder sb)
-    {
-        if (currentIndex != indexLength - 1)
-        {
-            sb.Append(", ");
-        }
-    }
     
-    private static void AddPropertiesRecursively(object obj, StringBuilder sb)
+    
+    private static string StringifyObject(object obj)
     {
-        sb.Append("{ ");
-        var objType = obj.GetType();
-        var properties = objType.GetProperties();
-        for (var propertyIndex = 0; propertyIndex < properties.Length; propertyIndex++)
+        var type = obj.GetType();
+        var properties = type.GetProperties();
+
+        var propertyStrings = new List<string>();
+
+        foreach (var property in properties)
         {
-            var property = properties[propertyIndex];
-            var propValue = property.GetValue(obj, null);
-
-            sb.Append($"\"{property.Name}\": ");
-
-            if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
-            {
-                sb.Append($"\"{propValue}\"");
-            }
-            else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
-            {
-                var enumerable = (IEnumerable)propValue;
-
-                IterateChild(enumerable);
-            }
-            else
-            {
-                sb.Append($"\"{propValue}\"");
-            }
-
-            MaybeAppendComma(propertyIndex, properties.Length, sb);
-        }
-
-        sb.Append(" }");
-        
-        void IterateChild(IEnumerable? enumerable)
-        {
-            if (enumerable == null)
-            {
-                sb.Append("null");
-                return;
-            }
-
-            sb.Append("[");
+            var propertyName = property.Name;
+            var propertyValue = property.GetValue(obj);
+            var value = "null";
             
-            var children = enumerable.Cast<object>().EnsureList();
-
-            for (var childIndex = 0; childIndex < children.Count; childIndex++)
+            if (propertyValue != null)
             {
-                var child = children[childIndex];
-                AddPropertiesRecursively(child, sb);
-                
-                MaybeAppendComma(childIndex, children.Count, sb);
-            }
+                if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))
+                {
+                    var collection = ((IEnumerable)propertyValue).Cast<object>();
+                    var collectionStrings = collection.Select(StringifyObject).EnsureList();
 
-            sb.Append("]");
+                    value = $"[{ collectionStrings.JoinString(", ")}]";
+                }
+                else
+                {
+                    value = propertyValue.ToString();
+                }
+
+                if (property.PropertyType == typeof(string))
+                {
+                    value = $"\"{value}\"";
+                }
+            }
+            
+            propertyStrings.Add($"\"{propertyName}\": {value}");
         }
+
+        return $"{{ { propertyStrings.JoinString(", ")} }}";
     }
 }
