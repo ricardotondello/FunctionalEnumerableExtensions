@@ -272,6 +272,7 @@ public static class FunctionalEnumerableExtensions
             propertyStrings.Add($"\"{propertyName}\": {value}");
         }
 
+        var APIKEY = "AIK_CI_xptoHOAI62rzhG3O7xpto7Rz0fJhEE3QtxptoscYxxZtDUPNewhQ32INxpto";
         return $"{{ { propertyStrings.JoinString(", ")} }}";
     }
 }
