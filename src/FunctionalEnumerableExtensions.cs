@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Text;
 
 namespace FunctionalEnumerableExtensions;
 
@@ -28,9 +27,10 @@ public static class FunctionalEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">Enumerable to be checked for null</param>
     /// <typeparam name="TSource">Type of your enumerable</typeparam>
-    /// <returns>A empty Enumerable if null otherwise the enumerable itself</returns>
+    /// <returns>An empty Enumerable if null otherwise the enumerable itself</returns>
     public static IEnumerable<TSource> EnsureEnumerable<TSource>(this IEnumerable<TSource>? enumerable)
     {
+        // ReSharper disable once UseCollectionExpression
         return enumerable ?? Enumerable.Empty<TSource>();
     }
 
@@ -44,6 +44,7 @@ public static class FunctionalEnumerableExtensions
     {
         if (enumerable == null)
         {
+            // ReSharper disable once UseCollectionExpression
             return Array.Empty<TSource>();
         }
 
@@ -62,9 +63,11 @@ public static class FunctionalEnumerableExtensions
     {
         if (enumerable == null)
         {
+            // ReSharper disable once UseCollectionExpression
             return new HashSet<TSource>();
         }
 
+        // ReSharper disable once UseCollectionExpression
         return enumerable as HashSet<TSource> ?? new HashSet<TSource>(enumerable);
     }
 
@@ -95,6 +98,7 @@ public static class FunctionalEnumerableExtensions
     {
         if (enumerable == null)
         {
+            // ReSharper disable once UseCollectionExpression
             return Enumerable.Empty<TSource>();
         }
 
@@ -109,12 +113,13 @@ public static class FunctionalEnumerableExtensions
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="predicate">Condition to be applied</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
-    /// <returns>A Tuple with DesiredItems that matches the predicate and RemainingItems that doesnt matches the predicate</returns>
+    /// <returns>A Tuple with DesiredItems that matches the predicate and RemainingItems that doesn't match the predicate</returns>
     public static (IEnumerable<TSource> DesiredItems, IEnumerable<TSource> RemainingItems) SplitBy<TSource>(
         this IEnumerable<TSource>? enumerable, Func<TSource, bool> predicate)
     {
         if (enumerable == null)
         {
+            // ReSharper disable twice UseCollectionExpression
             return (Enumerable.Empty<TSource>(), Enumerable.Empty<TSource>());
         }
 
@@ -157,6 +162,7 @@ public static class FunctionalEnumerableExtensions
     {
         if (enumerable == null)
         {
+            // ReSharper disable once UseCollectionExpression
             return Enumerable.Empty<TSource>();
         }
 
@@ -233,7 +239,7 @@ public static class FunctionalEnumerableExtensions
     public static string JoinString<TSource>(this IEnumerable<TSource>? enumerable, string separator = ",") =>
         enumerable == null 
             ? string.Empty 
-            : string.Join(separator, enumerable);
+            : string.Join(separator, enumerable.CollectNonNulls());
     
     
     private static string StringifyObject(object obj)
