@@ -6,6 +6,7 @@ public class FunctionalEnumerableExtensionsTests
 {
     private readonly ITestOutputHelper _testOutputHelper;
 
+    // ReSharper disable once ConvertToPrimaryConstructor
     public FunctionalEnumerableExtensionsTests(ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
@@ -261,6 +262,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.EnsureEnumerable();
 
         // Assert
+        // ReSharper disable once UseCollectionExpression
         result.Should().BeSameAs(Enumerable.Empty<string>());
     }
 
@@ -401,7 +403,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.WhereIf(false, w => w > 2);
 
         //Assert
-        result.Should().Contain(new[] { 1, 2, 3 });
+        result.Should().Contain(list);
     }
 
     [Fact]
@@ -441,7 +443,8 @@ public class FunctionalEnumerableExtensionsTests
         list.Each(item => { doubleList.Add(item * 2); });
 
         //Assert
-        doubleList.Should().Contain(new[] { 2, 4, 6 });
+        var expectedValue = new[] { 2, 4, 6 };
+        doubleList.Should().Contain(expectedValue);
     }
 
     [Fact]
@@ -533,17 +536,23 @@ public class FunctionalEnumerableExtensionsTests
         //Arrange
         var list = new List<MyClass>
         {
-            new ("Name1", 21, DateTime.UtcNow, null),
-            new ("Name2", 21, DateTime.UtcNow, null),
-            new ("Name3", 21, DateTime.UtcNow, null),
-            new ("Name4", 21, DateTime.UtcNow, null)
+            new ("Name1", 21, new DateTime(2024, 01, 01, 10,50,56), null),
+            new ("Name2", 22, new DateTime(2023, 01, 01, 10,50,56), null),
+            new ("Name3", 23, new DateTime(2022, 01, 01, 10,50,56), null),
+            new ("Name4", 24, new DateTime(2021, 01, 01, 10,50,56), null)
         };
         
         //Act
-        var result = list.Select(s => s.Name).JoinString();
+        var resultName = list.Select(s => s.Name).JoinString();
+        var resultAge = list.Select(s => s.Age).JoinString();
+        var resultDate = list.Select(s => s.Dob!.Value.Year).JoinString();
+        var resultClass = list.Select(s => s.Classes).JoinString();
         
         //Assert
-        result.Should().Be("Name1,Name2,Name3,Name4");
+        resultName.Should().Be("Name1,Name2,Name3,Name4");
+        resultAge.Should().Be("21,22,23,24");
+        resultDate.Should().Be("2024,2023,2022,2021");
+        resultClass.Should().Be(string.Empty);
     }
     
     [Fact]
