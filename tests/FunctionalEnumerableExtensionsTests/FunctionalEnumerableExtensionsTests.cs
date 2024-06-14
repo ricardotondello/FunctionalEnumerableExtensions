@@ -178,9 +178,10 @@ public class FunctionalEnumerableExtensionsTests
 
         // Act
         var result = input.CollectNonNulls();
+        var expectedValue = new List<int> { 1, 3, 5 };
 
         // Assert
-        result.Should().BeEquivalentTo(new[] { 1, 3, 5 });
+        result.Should().BeEquivalentTo(expectedValue);
     }
 
     [Fact]
@@ -286,8 +287,10 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.SplitBy(s => s.Equals("b", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
-        result.DesiredItems.Should().Contain(new[] { "b", "b" });
-        result.RemainingItems.Should().Contain(new[] { "a", "c" });
+        var expectedDesiredItems = new[] { "b", "b" };
+        var expectedRemainingItems = new[] { "a", "c" };
+        result.DesiredItems.Should().Contain(expectedDesiredItems);
+        result.RemainingItems.Should().Contain(expectedRemainingItems);
     }
 
     [Fact]
@@ -301,8 +304,9 @@ public class FunctionalEnumerableExtensionsTests
             input.SplitBy(s => s.Equals("d", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
+        var expectedRemaining = new[] { "a", "b", "b", "c" };
         desiredItems.Should().BeEmpty();
-        remainingItems.Should().Contain(new[] { "a", "b", "b", "c" });
+        remainingItems.Should().Contain(expectedRemaining);
     }
 
     [Fact]
@@ -315,7 +319,8 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.SplitBy(s => s.Equals("a", StringComparison.InvariantCultureIgnoreCase));
 
         // Assert
-        result.DesiredItems.Should().Contain(new[] { "a", "a", "a", "a" });
+        var expectedDesiredItems = new[] { "a", "a", "a", "a" };
+        result.DesiredItems.Should().Contain(expectedDesiredItems);
         result.RemainingItems.Should().BeEmpty();
     }
 
@@ -382,7 +387,8 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.WhereIf(true, w => w > 2);
 
         //Assert
-        result.Should().Contain(new[] { 3 });
+        var expectedResult = new[] { 3 };
+        result.Should().Contain(expectedResult);
     }
 
     [Fact]
