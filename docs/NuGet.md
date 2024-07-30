@@ -128,3 +128,20 @@ Chainable method that joins the separator string with the items of your Enumerab
 ```csharp
 var result = list.Select(s => s.Name).JoinString();
 ```
+
+### `OrderBy` and `OrderByDescending` with a delegate comparer
+
+Sorts the elements of a sequence in ascending/descending order by using a specified comparer.
+
+**Usage**
+```csharp
+record Customer(string Name, int Age);
+
+//Order by name then by age
+//user OrderByDescending to order descendingly
+var result = values.OrderBy(x => (x.Name, x.Age), (a, b) =>
+        {
+            var nameComparison = string.Compare(a.Name, b.Name, StringComparison.Ordinal);
+            return nameComparison != 0 ? nameComparison : a.Age.CompareTo(b.Age);
+        });
+```

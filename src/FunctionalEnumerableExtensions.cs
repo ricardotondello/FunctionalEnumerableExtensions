@@ -14,6 +14,7 @@ public static class FunctionalEnumerableExtensions
     {
         if (enumerable == null)
         {
+            // ReSharper disable once UseCollectionExpression
             return new List<TSource>();
         }
 
@@ -123,16 +124,13 @@ public static class FunctionalEnumerableExtensions
             return (Enumerable.Empty<TSource>(), Enumerable.Empty<TSource>());
         }
 
-        var groups = enumerable
-            .GroupBy(predicate)
+        var groups = enumerable.GroupBy(predicate)
             .ToArray();
 
-        var desiredItems = groups
-            .Where(w => w.Key)
+        var desiredItems = groups.Where(w => w.Key)
             .SelectMany(s => s);
 
-        var remainingItems = groups
-            .Where(w => !w.Key)
+        var remainingItems = groups.Where(w => !w.Key)
             .SelectMany(s => s);
 
         return (desiredItems, remainingItems);
@@ -154,7 +152,7 @@ public static class FunctionalEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">Your Enumerable</param>
     /// <param name="condition">Boolean</param>
-    /// <param name="predicate">Where condition to be apply if condition is true, otherwise the enumerable</param>
+    /// <param name="predicate">Where condition to be applied if condition is true, otherwise the enumerable</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>The Enumerable when condition is `True` otherwise Empty Enumerable</returns>
     public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource>? enumerable, bool condition,
@@ -166,7 +164,9 @@ public static class FunctionalEnumerableExtensions
             return Enumerable.Empty<TSource>();
         }
 
-        return condition ? enumerable.Where(predicate) : enumerable;
+        return condition
+            ? enumerable.Where(predicate)
+            : enumerable;
     }
 
     /// <summary>
@@ -202,11 +202,10 @@ public static class FunctionalEnumerableExtensions
             return string.Empty;
         }
 
-        var items = enumerable
-            .CollectNonNulls()
+        var items = enumerable.CollectNonNulls()
             .EnsureList()
             .Select(StringifyObject);
-        
+
         return items.JoinString(", ");
     }
 
@@ -216,15 +215,17 @@ public static class FunctionalEnumerableExtensions
     /// <param name="enumerable">Your Enumerable</param>
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>A Tuple list with Index for each element of your enumerable</returns>
-    public static IEnumerable<(int Index, TSource Item)> EnumerateWithIndex<TSource>(this IEnumerable<TSource>? enumerable)
+    public static IEnumerable<(int Index, TSource Item)> EnumerateWithIndex<TSource>(
+        this IEnumerable<TSource>? enumerable)
     {
         if (enumerable == null)
         {
             yield break;
         }
-        
+
         var index = 0;
-        foreach (var item in enumerable) {
+        foreach (var item in enumerable)
+        {
             yield return (index++, item);
         }
     }
@@ -237,11 +238,41 @@ public static class FunctionalEnumerableExtensions
     /// <typeparam name="TSource">The type of the elements of source</typeparam>
     /// <returns>A string concatenating each element with separator value</returns>
     public static string JoinString<TSource>(this IEnumerable<TSource>? enumerable, string separator = ",") =>
-        enumerable == null 
-            ? string.Empty 
+        enumerable == null
+            ? string.Empty
             : string.Join(separator, enumerable.CollectNonNulls());
-    
-    
+
+    /// <summary>
+    /// Sorts the elements of a sequence in ascending order by using a specified <paramref name="comparer"/>.
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <param name="keySelector">A function to extract a key from an element</param>
+    /// <param name="comparer">A function to compare keys</param>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
+    /// <typeparam name="TKey">The type of the key returned by keySelector</typeparam>
+    /// <returns>An <see cref="IEnumerable{TElement}"/> whose elements are sorted according to a key</returns>
+    public static IEnumerable<TSource> OrderBy<TSource, TKey>(this IEnumerable<TSource>? enumerable,
+        Func<TSource, TKey> keySelector, Func<TKey, TKey, int> comparer)
+    {
+        return enumerable?.OrderBy(keySelector, new DelegateComparer<TKey>(comparer)) ?? Enumerable.Empty<TSource>();
+    }
+
+    /// <summary>
+    /// Sorts the elements of a sequence in descending order by using a specified <paramref name="comparer"/>.
+    /// </summary>
+    /// <param name="enumerable">Your Enumerable</param>
+    /// <param name="keySelector">A function to extract a key from an element</param>
+    /// <param name="comparer">A function to compare keys</param>
+    /// <typeparam name="TSource">The type of the elements of source</typeparam>
+    /// <typeparam name="TKey">The type of the key returned by keySelector</typeparam>
+    /// <returns>An <see cref="IEnumerable{TElement}"/> whose elements are sorted according to a key</returns>
+    public static IEnumerable<TSource> OrderByDescending<TSource, TKey>(this IEnumerable<TSource>? enumerable,
+        Func<TSource, TKey> keySelector, Func<TKey, TKey, int> comparer)
+    {
+        return enumerable?.OrderByDescending(keySelector, new DelegateComparer<TKey>(comparer)) ??
+               Enumerable.Empty<TSource>();
+    }
+
     private static string StringifyObject(object obj)
     {
         var type = obj.GetType();
@@ -254,15 +285,17 @@ public static class FunctionalEnumerableExtensions
             var propertyName = property.Name;
             var propertyValue = property.GetValue(obj);
             var value = "null";
-            
+
             if (propertyValue != null)
             {
-                if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))
+                if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) &&
+                    property.PropertyType != typeof(string))
                 {
                     var collection = ((IEnumerable)propertyValue).Cast<object>();
-                    var collectionStrings = collection.Select(StringifyObject).EnsureList();
+                    var collectionStrings = collection.Select(StringifyObject)
+                        .EnsureList();
 
-                    value = $"[{ collectionStrings.JoinString(", ")}]";
+                    value = $"[{collectionStrings.JoinString(", ")}]";
                 }
                 else
                 {
@@ -274,10 +307,18 @@ public static class FunctionalEnumerableExtensions
                     value = $"\"{value}\"";
                 }
             }
-            
+
             propertyStrings.Add($"\"{propertyName}\": {value}");
         }
 
-        return $"{{ { propertyStrings.JoinString(", ")} }}";
+        return $"{{ {propertyStrings.JoinString(", ")} }}";
+    }
+
+    private sealed class DelegateComparer<T>(Func<T, T, int> comparer) : IComparer<T>
+    {
+        public int Compare(T x, T y)
+        {
+            return comparer(x, y);
+        }
     }
 }
