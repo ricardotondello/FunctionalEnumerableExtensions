@@ -1,26 +1,14 @@
-using Xunit.Abstractions;
-
 namespace FunctionalEnumerableExtensionsTests;
 
 public class FunctionalEnumerableExtensionsTests
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    // ReSharper disable once ConvertToPrimaryConstructor
-    public FunctionalEnumerableExtensionsTests(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void EnsureList_WithNull_ShouldNotThrowsArgumentNullException()
     {
         IEnumerable<int> input = null!;
 
-        Action action = () => input.EnsureList();
-
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        var ex = Record.Exception(() => input.EnsureList());
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -30,8 +18,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.EnsureList();
 
-        result.Should()
-            .BeSameAs(input);
+        Assert.Equal(input, result);
     }
 
     [Fact]
@@ -42,8 +29,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.EnsureList();
 
-        result.Should()
-            .BeSameAs(input);
+        Assert.Equal(input, result);
     }
 
     [Fact]
@@ -54,9 +40,8 @@ public class FunctionalEnumerableExtensionsTests
         // ReSharper disable PossibleMultipleEnumeration
         var result = input.EnsureList();
 
-        result.Should()
-            .NotBeSameAs(input)
-            .And.BeEquivalentTo(input);
+        Assert.NotSame(input, result);
+        Assert.Equivalent(input, result);
     }
 
     [Fact]
@@ -66,8 +51,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.EnsureList();
 
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -75,10 +59,8 @@ public class FunctionalEnumerableExtensionsTests
     {
         IEnumerable<int> input = null!;
 
-        Action action = () => input.EnsureArray();
-
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        var ex = Record.Exception(() => input.EnsureArray());
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -88,8 +70,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.EnsureArray();
 
-        result.Should()
-            .BeSameAs(input);
+        Assert.Same(result, input);
     }
 
     [Fact]
@@ -99,9 +80,8 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.EnsureArray();
 
-        result.Should()
-            .NotBeSameAs(input)
-            .And.BeEquivalentTo(input);
+        Assert.NotSame(input, result);
+        Assert.Equivalent(input, result);
     }
 
     [Fact]
@@ -111,8 +91,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.EnsureArray();
 
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -120,10 +99,8 @@ public class FunctionalEnumerableExtensionsTests
     {
         IEnumerable<int> input = null!;
 
-        Action action = () => input.AsSpan();
-
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        var ex = Record.Exception(() => input.AsSpan());
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -133,9 +110,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.AsSpan();
 
-        result.ToArray()
-            .Should()
-            .BeEquivalentTo(input);
+        Assert.Equivalent(result.ToArray(), input);
     }
 
     [Fact]
@@ -145,9 +120,7 @@ public class FunctionalEnumerableExtensionsTests
 
         var result = input.AsSpan();
 
-        result.ToArray()
-            .Should()
-            .BeEquivalentTo(input);
+        Assert.Equivalent(result.ToArray(), input);
     }
 
     [Fact]
@@ -155,12 +128,8 @@ public class FunctionalEnumerableExtensionsTests
     {
         IEnumerable<int> input = null!;
 
-        Action action = () => input.AsSpan();
-
-        action.Should()
-            .NotThrow<ArgumentNullException>();
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        var ex = Record.Exception(() => input.AsSpan());
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -170,11 +139,10 @@ public class FunctionalEnumerableExtensionsTests
         IEnumerable<object> input = null!;
 
         // Act
-        Action action = () => input.CollectNonNulls();
+        var ex = Record.Exception(() => input.CollectNonNulls());
 
         // Assert
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -187,8 +155,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.CollectNonNulls();
 
         // Assert
-        result.Should()
-            .BeEquivalentTo("a", "b", "c");
+        Assert.Equivalent(new List<string> { "a", "b", "c" }, result);
     }
 
     [Fact]
@@ -209,8 +176,7 @@ public class FunctionalEnumerableExtensionsTests
         var expectedValue = new List<int> { 1, 3, 5 };
 
         // Assert
-        result.Should()
-            .BeEquivalentTo(expectedValue);
+        Assert.Equivalent(expectedValue, result);
     }
 
     [Fact]
@@ -223,8 +189,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.CollectNonNulls();
 
         // Assert
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -234,11 +199,10 @@ public class FunctionalEnumerableExtensionsTests
         IEnumerable<object> input = null!;
 
         // Act
-        Action action = () => input.EnsureHashSet();
+        var ex = Record.Exception(() => input.EnsureHashSet());
 
         // Assert
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -251,8 +215,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.EnsureHashSet();
 
         // Assert
-        result.Should()
-            .BeSameAs(input);
+        Assert.Same(input, result);
     }
 
     [Fact]
@@ -265,10 +228,8 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.EnsureHashSet();
 
         // Assert
-        result.Should()
-            .BeEquivalentTo("a", "b", "c");
-        result.Should()
-            .NotBeSameAs(input);
+        Assert.Equivalent(new List<string> { "a", "b", "c" }, result);
+        Assert.NotSame(input, result);
     }
 
     [Fact]
@@ -282,8 +243,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.EnsureHashSet();
 
         // Assert
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -297,22 +257,21 @@ public class FunctionalEnumerableExtensionsTests
 
         // Assert
         // ReSharper disable once UseCollectionExpression
-        result.Should()
-            .BeSameAs(Enumerable.Empty<string>());
+        Assert.Same(Enumerable.Empty<string>(), result);
     }
 
     [Fact]
     public void EnsureEnumerable_NotNull_ReturnsEnumerableItSelf()
     {
         // Arrange
+        // ReSharper disable once UseCollectionExpression
         IEnumerable<string> input = new[] { "a", "b" };
 
         // Act
         var result = input.EnsureEnumerable();
 
         // Assert
-        result.Should()
-            .BeSameAs(input);
+        Assert.Same(input, result);
     }
 
     [Fact]
@@ -327,10 +286,8 @@ public class FunctionalEnumerableExtensionsTests
         // Assert
         var expectedDesiredItems = new[] { "b", "b" };
         var expectedRemainingItems = new[] { "a", "c" };
-        result.DesiredItems.Should()
-            .Contain(expectedDesiredItems);
-        result.RemainingItems.Should()
-            .Contain(expectedRemainingItems);
+        Assert.Equal(expectedDesiredItems, result.DesiredItems);
+        Assert.Equal(expectedRemainingItems, result.RemainingItems);
     }
 
     [Fact]
@@ -345,10 +302,8 @@ public class FunctionalEnumerableExtensionsTests
 
         // Assert
         var expectedRemaining = new[] { "a", "b", "b", "c" };
-        desiredItems.Should()
-            .BeEmpty();
-        remainingItems.Should()
-            .Contain(expectedRemaining);
+        Assert.Empty(desiredItems);
+        Assert.Equal(expectedRemaining, remainingItems);
     }
 
     [Fact]
@@ -362,10 +317,8 @@ public class FunctionalEnumerableExtensionsTests
 
         // Assert
         var expectedDesiredItems = new[] { "a", "a", "a", "a" };
-        result.DesiredItems.Should()
-            .Contain(expectedDesiredItems);
-        result.RemainingItems.Should()
-            .BeEmpty();
+        Assert.Equal(expectedDesiredItems, result.DesiredItems);
+        Assert.Empty(result.RemainingItems);
     }
 
     [Fact]
@@ -375,11 +328,11 @@ public class FunctionalEnumerableExtensionsTests
         IEnumerable<string> input = null!;
 
         // Act
-        Action action = () => input.SplitBy(s => s.Equals("whatever", StringComparison.InvariantCultureIgnoreCase));
+        var ex = Record.Exception(() =>
+            input.SplitBy(s => s.Equals("whatever", StringComparison.InvariantCultureIgnoreCase)));
 
         // Assert
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -392,8 +345,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.IsNullOrEmpty();
 
         // Assert
-        result.Should()
-            .BeTrue();
+        Assert.True(result);
     }
 
     [Fact]
@@ -406,8 +358,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.IsNullOrEmpty();
 
         // Assert
-        result.Should()
-            .BeTrue();
+        Assert.True(result);
     }
 
     [Fact]
@@ -420,8 +371,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.IsNullOrEmpty();
 
         // Assert
-        result.Should()
-            .BeFalse();
+        Assert.False(result);
     }
 
     [Fact]
@@ -436,8 +386,7 @@ public class FunctionalEnumerableExtensionsTests
 
         //Assert
         var expectedResult = new[] { 3 };
-        result.Should()
-            .Contain(expectedResult);
+        Assert.Equal(expectedResult, result);
     }
 
     [Fact]
@@ -450,8 +399,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.WhereIf(false, w => w > 2);
 
         //Assert
-        result.Should()
-            .Contain(list);
+        Assert.Equal(list, result);
     }
 
     [Fact]
@@ -461,11 +409,10 @@ public class FunctionalEnumerableExtensionsTests
         IEnumerable<int> input = null!;
 
         //Act
-        Action action = () => input.WhereIf(true, w => w > 0);
+        var ex = Record.Exception(() => input.WhereIf(true, w => w > 0));
 
         //Assert
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -475,11 +422,10 @@ public class FunctionalEnumerableExtensionsTests
         IEnumerable<int> input = null!;
 
         //Act
-        Action action = () => input.Each(a => { _ = a.ToString(); });
+        var ex = Record.Exception(() => input.Each(a => { _ = a.ToString(); }));
 
         //Assert
-        action.Should()
-            .NotThrow<ArgumentNullException>();
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -494,8 +440,7 @@ public class FunctionalEnumerableExtensionsTests
 
         //Assert
         var expectedValue = new[] { 2, 4, 6 };
-        doubleList.Should()
-            .Contain(expectedValue);
+        Assert.Equal(expectedValue, doubleList);
     }
 
     [Fact]
@@ -514,17 +459,17 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.Stringify();
 
         //Assert
-        _testOutputHelper.WriteLine($"result was :{result}");
         var stringDob = $"{dob}";
-        result.Should()
-            .Be("{ \"Name\": \"My Name is 0\", \"Age\": 0, \"Dob\": " + stringDob + ", " +
-                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": 1, \"Dob\": null, \"Classes\": null }, " +
-                "{ \"Name\": \"child 2\", \"Age\": 2, \"Dob\": null, \"Classes\": null }, " +
-                "{ \"Name\": \"child 3\", \"Age\": 3, \"Dob\": null, \"Classes\": null }] }, " +
-                "{ \"Name\": \"My Name is 1\", \"Age\": 1, \"Dob\": " + stringDob + ", " +
-                "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": 1, \"Dob\": null, \"Classes\": null }, " +
-                "{ \"Name\": \"child 2\", \"Age\": 2, \"Dob\": null, \"Classes\": null }, " +
-                "{ \"Name\": \"child 3\", \"Age\": 3, \"Dob\": null, \"Classes\": null }] }");
+        var expected = "{ \"Name\": \"My Name is 0\", \"Age\": 0, \"Dob\": " + stringDob + ", " +
+                       "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": 1, \"Dob\": null, \"Classes\": null }, " +
+                       "{ \"Name\": \"child 2\", \"Age\": 2, \"Dob\": null, \"Classes\": null }, " +
+                       "{ \"Name\": \"child 3\", \"Age\": 3, \"Dob\": null, \"Classes\": null }] }, " +
+                       "{ \"Name\": \"My Name is 1\", \"Age\": 1, \"Dob\": " + stringDob + ", " +
+                       "\"Classes\": [{ \"Name\": \"child 1\", \"Age\": 1, \"Dob\": null, \"Classes\": null }, " +
+                       "{ \"Name\": \"child 2\", \"Age\": 2, \"Dob\": null, \"Classes\": null }, " +
+                       "{ \"Name\": \"child 3\", \"Age\": 3, \"Dob\": null, \"Classes\": null }] }";
+
+        Assert.Equal(expected, result);
     }
 
     [Fact]
@@ -537,8 +482,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = input.Stringify();
 
         //Assert
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -560,10 +504,8 @@ public class FunctionalEnumerableExtensionsTests
         var indexCheck = 0;
         foreach (var (index, item) in listWithIndex)
         {
-            index.Should()
-                .Be(indexCheck++);
-            item.Should()
-                .NotBeNull();
+            Assert.Equal(indexCheck++, index);
+            Assert.NotNull(item);
         }
     }
 
@@ -577,8 +519,7 @@ public class FunctionalEnumerableExtensionsTests
         var listWithIndex = list.EnumerateWithIndex();
 
         //Assert
-        listWithIndex.Should()
-            .BeEmpty();
+        Assert.Empty(listWithIndex);
     }
 
     [Fact]
@@ -604,14 +545,10 @@ public class FunctionalEnumerableExtensionsTests
             .JoinString();
 
         //Assert
-        resultName.Should()
-            .Be("Name1,Name2,Name3,Name4");
-        resultAge.Should()
-            .Be("21,22,23,24");
-        resultDate.Should()
-            .Be("2024,2023,2022,2021");
-        resultClass.Should()
-            .Be(string.Empty);
+        Assert.Equal("Name1,Name2,Name3,Name4", resultName);
+        Assert.Equal("21,22,23,24", resultAge);
+        Assert.Equal("2024,2023,2022,2021", resultDate);
+        Assert.Equal(string.Empty, resultClass);
     }
 
     [Fact]
@@ -624,8 +561,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.JoinString();
 
         //Assert
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -638,8 +574,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.OrderBy(x => x, (a, b) => a.CompareTo(b));
 
         //Assert
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -651,9 +586,8 @@ public class FunctionalEnumerableExtensionsTests
         //Act
         var result = list.OrderBy(x => x, (a, b) => a.CompareTo(b));
 
-        //Asser
-        result.Should()
-            .BeEmpty();
+        //Assert
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -667,11 +601,8 @@ public class FunctionalEnumerableExtensionsTests
             .ToList();
 
         //Assert
-        result.Should()
-            .HaveCount(1);
-        result[0]
-            .Should()
-            .Be(5);
+        Assert.Single(result);
+        Assert.Equal(5, result[0]);
     }
 
     [Fact]
@@ -714,9 +645,7 @@ public class FunctionalEnumerableExtensionsTests
             new("ZZZ", 4),
             new("ZZZ", 5)
         };
-
-        result.Should()
-            .BeEquivalentTo(expected, opt => opt.WithStrictOrdering());
+        Assert.Equal(expected, result);
     }
 
     [Fact]
@@ -729,8 +658,7 @@ public class FunctionalEnumerableExtensionsTests
         var result = list.OrderByDescending(x => x, (a, b) => a.CompareTo(b));
 
         //Assert
-        result.Should()
-            .BeEmpty();
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -742,9 +670,8 @@ public class FunctionalEnumerableExtensionsTests
         //Act
         var result = list.OrderByDescending(x => x, (a, b) => a.CompareTo(b));
 
-        //Asser
-        result.Should()
-            .BeEmpty();
+        //Assert
+        Assert.Empty(result);
     }
 
     [Fact]
@@ -758,11 +685,8 @@ public class FunctionalEnumerableExtensionsTests
             .ToList();
 
         //Assert
-        result.Should()
-            .HaveCount(1);
-        result[0]
-            .Should()
-            .Be(5);
+        Assert.Single(result);
+        Assert.Equal(5, result[0]);
     }
 
     [Fact]
@@ -806,8 +730,7 @@ public class FunctionalEnumerableExtensionsTests
             new("AAA", 9)
         };
 
-        result.Should()
-            .BeEquivalentTo(expected, opt => opt.WithStrictOrdering());
+        Assert.Equal(expected, result);
     }
 }
 
