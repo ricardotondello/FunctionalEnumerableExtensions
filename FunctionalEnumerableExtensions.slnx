@@ -1,4 +1,8 @@
 <Solution>
-  <Project Path="src/FunctionalEnumerableExtensions.csproj" />
-  <Project Path="tests/FunctionalEnumerableExtensionsTests/FunctionalEnumerableExtensionsTests.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/FunctionalEnumerableExtensions.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FunctionalEnumerableExtensionsTests/FunctionalEnumerableExtensionsTests.csproj" />
+  </Folder>
 </Solution>
