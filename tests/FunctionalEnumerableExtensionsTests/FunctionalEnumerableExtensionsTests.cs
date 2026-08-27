@@ -486,6 +486,22 @@ public class FunctionalEnumerableExtensionsTests
     }
 
     [Fact]
+    public void Stringify_WhenCalledMultipleTimes_ShouldReturnExpectedResultEachTime()
+    {
+        //Arrange
+        var first = new List<MyClass> { new(Name: "First", Age: 1, Dob: null, Classes: null) };
+        var second = new List<MyClass> { new(Name: "Second", Age: 2, Dob: null, Classes: null) };
+
+        //Act
+        var firstResult = first.Stringify();
+        var secondResult = second.Stringify();
+
+        //Assert
+        Assert.Equal("{ \"Name\": \"First\", \"Age\": 1, \"Dob\": null, \"Classes\": null }", firstResult);
+        Assert.Equal("{ \"Name\": \"Second\", \"Age\": 2, \"Dob\": null, \"Classes\": null }", secondResult);
+    }
+
+    [Fact]
     public void EnumerateWithIndex_WithValidEnumerable_ShouldEnumerateWithIndexes()
     {
         //Arrange
